@@ -46,6 +46,11 @@ function drawNormal(){
   ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x0,y1);ctx.lineTo(x1,y1);ctx.stroke();
   ctx.strokeStyle=line;
   ctx.beginPath();ctx.moveTo(mapX(0),y0);ctx.lineTo(mapX(0),y1);ctx.stroke();
+  ctx.fillStyle=line;
+  ctx.font='12px Inter';
+  ctx.textAlign='center';
+  ctx.fillText('0',mapX(0),y0+24);
+  ctx.textAlign='start';
   const zVals=[-2,-1,1,2];
   zVals.forEach(z=>{
     ctx.setLineDash([4,6]);
@@ -98,11 +103,70 @@ function init(){resizeCanvas();animate();}
 window.addEventListener('resize',resizeCanvas);
 init();
 
-document.getElementById('ctaTop').onclick=()=>document.querySelector('#signup').scrollIntoView({behavior:'smooth'});
-document.getElementById('ctaMid').onclick=e=>{e.preventDefault();document.querySelector('#signup').scrollIntoView({behavior:'smooth'});};
+const signupSection=document.getElementById('signup');
+const ctaTop=document.getElementById('ctaTop');
+const ctaMid=document.getElementById('ctaMid');
+const earlyAlert=document.getElementById('earlyAccessAlert');
+const alertApply=document.getElementById('alertApply');
+let alertTimer=0;
+
+function scrollToSignup(){
+  if(signupSection){
+    signupSection.scrollIntoView({behavior:'smooth'});
+  }
+}
+function hideEarlyAlert(immediate=false){
+  if(!earlyAlert)return;
+  clearTimeout(alertTimer);
+  if(immediate){
+    earlyAlert.classList.remove('visible','fading');
+    earlyAlert.classList.add('hidden');
+    return;
+  }
+  earlyAlert.classList.add('fading');
+}
+function showEarlyAlert(){
+  if(!earlyAlert)return;
+  clearTimeout(alertTimer);
+  earlyAlert.classList.remove('hidden','fading');
+  requestAnimationFrame(()=>{
+    earlyAlert.classList.add('visible');
+  });
+  alertTimer=window.setTimeout(()=>hideEarlyAlert(),10000);
+}
+ctaTop?.addEventListener('click',scrollToSignup);
+ctaMid?.addEventListener('click',e=>{
+  e.preventDefault();
+  showEarlyAlert();
+});
+alertApply?.addEventListener('click',()=>{
+  hideEarlyAlert(true);
+  scrollToSignup();
+});
+earlyAlert?.addEventListener('transitionend',event=>{
+  if(event.propertyName==='opacity'&&earlyAlert.classList.contains('fading')){
+    hideEarlyAlert(true);
+  }
+});
 
 const form=document.getElementById('betaForm');
 const msg=document.getElementById('formMsg');
+const remoteEndpoint=form?.dataset?.remoteEndpoint?.trim()||'';
+const submitButton=form?.querySelector('button[type="submit"]');
+const defaultSubmitText=submitButton?.textContent||'Join Waitlist';
+
+function setMessage(text,type='success'){
+  if(!msg)return;
+  msg.style.display='block';
+  msg.textContent=text;
+  if(type==='success'){
+    msg.dataset.state='success';
+  }else if(type==='error'){
+    msg.dataset.state='error';
+  }else{
+    msg.dataset.state='info';
+  }
+}
 function loadSubmissions(){
   try{
     const raw=localStorage.getItem(STORAGE_KEY);
@@ -116,8 +180,12 @@ function loadSubmissions(){
 }
 function saveSubmission(entry){
   const entries=loadSubmissions().filter(item=>item.email!==entry.email);
-  entries.push({...entry,submittedAt:new Date().toISOString()});
-  entries.sort((a,b)=>a.name.localeCompare(b.name,'en',{sensitivity:'base'}));
+  entries.push(entry);
+  entries.sort((a,b)=>{
+    const byName=a.name.localeCompare(b.name,'en',{sensitivity:'base'});
+    if(byName!==0)return byName;
+    return a.email.localeCompare(b.email,'en',{sensitivity:'base'});
+  });
   try{
     localStorage.setItem(STORAGE_KEY,JSON.stringify(entries));
   }catch(err){
@@ -125,14 +193,68 @@ function saveSubmission(entry){
   }
   return entries;
 }
-form.addEventListener('submit',e=>{
+async function sendToRemote(entry){
+  if(!remoteEndpoint)return {ok:true};
+  try{
+    const response=await fetch(remoteEndpoint,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Accept':'application/json'
+      },
+      body:JSON.stringify(entry)
+    });
+    if(!response.ok){
+      const contentType=response.headers.get('Content-Type')||'';
+      let detail='';
+      if(contentType.includes('application/json')){
+        const data=await response.json().catch(()=>null);
+        detail=data?.message||data?.error||'';
+      }else{
+        detail=await response.text();
+      }
+      throw new Error(detail||`Request failed with status ${response.status}`);
+    }
+    return {ok:true};
+  }catch(err){
+    console.warn('Remote submission failed',err);
+    return {ok:false,error:err instanceof Error?err.message:String(err)};
+  }
+}
+form.addEventListener('submit',async e=>{
   e.preventDefault();
-  const n=document.getElementById('name').value.trim(),em=document.getElementById('email').value.trim();
-  if(!n||!em)return;
-  const submissions=saveSubmission({name:n,email:em});
-  msg.style.display='block';
-  msg.textContent=`Thanks, ${n}! You’re on the Arithmeticα waitlist. We’ll notify ${em} before the arena opens. (${submissions.length} total sign-ups stored.)`;
+  const n=document.getElementById('name').value.trim();
+  const em=document.getElementById('email').value.trim().toLowerCase();
+  if(!n||!em){
+    setMessage('Please fill in both your name and email before submitting.','error');
+    return;
+  }
+  const emailPattern=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if(!emailPattern.test(em)){
+    setMessage('Please enter a valid email address.','error');
+    return;
+  }
+  setMessage('Submitting your details…','info');
+  if(submitButton){
+    submitButton.disabled=true;
+    submitButton.textContent='Submitting…';
+  }
+  const entry={name:n,email:em,submittedAt:new Date().toISOString()};
+  const submissions=saveSubmission(entry);
+  const total=submissions.length;
+  let message=`Thanks, ${n}! You’re on the Arithmeticα waitlist. We’ll notify ${em} before the arena opens. (${total} total sign-ups stored.)`;
+  let messageType='success';
+  const remoteResult=await sendToRemote(entry);
+  if(!remoteResult.ok){
+    message+=` We couldn't reach the signup service. Entry saved locally.`;
+    messageType='error';
+  }
+  setMessage(message,messageType);
   form.reset();
+  if(submitButton){
+    submitButton.disabled=false;
+    submitButton.textContent=defaultSubmitText;
+  }
 });
 
 const toggle=document.getElementById('themeToggle');

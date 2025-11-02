@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Arithmeticα — Compete Beyond Numbers</title>
+<link rel="icon" type="image/png" href="images/logo_dark.png">
 <link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
@@ -17,7 +18,7 @@
     <div class="theme-toggle-circle"></div>
   </div>
   <h1>Compete Beyond Numbers.</h1>
-  <p class="sub">Solve real-time math challenges — integrals, functions, and Z-values — faster than your opponent.</p>
+  <p class="sub">Solve real-time math challenges — integrals, functions, and many other practical problems — faster than your opponent.</p>
   <button class="cta" id="ctaTop">Join the Live Arena</button>
 </header>
 
@@ -59,7 +60,7 @@
     <div id="signup" class="form">
       <h4>Get Early Access</h4>
       <p style="margin-top:0;color:var(--muted)">Join the beta and be the first to enter the arena.</p>
-      <form id="betaForm">
+      <form id="betaForm" data-remote-endpoint="">
         <div class="form-row">
           <input id="name" type="text" placeholder="Your name" required />
           <input id="email" type="email" placeholder="Email address" required />
@@ -67,11 +68,23 @@
         </div>
       </form>
       <p id="formMsg" class="msg"></p>
+      <p class="survey-link"><a href="https://docs.google.com/forms/d/e/1FAIpQLSdC8L2MZRH8gaoF90pp9q8IHLW8Qp1f65Fh10lsVzleNms3gQ/viewform" target="_blank" rel="noopener">Help us fill a quick survey</a> — it helps us grant early access faster.</p>
     </div>
   </div>
 </div>
 
-<footer>© 2025 Arithmeticα • <a class="link" href="#">Privacy Policy</a></footer>
+<footer>© 2025 Arithmeticα • <a class="link" href="#">Privacy Policy</a> • Made by Axetiz</footer>
+
+<div id="earlyAccessAlert" class="early-alert hidden">
+  <div class="early-alert-content">
+    <h5>Early access only</h5>
+    <p>The live arena is in early access. Apply below or fill out a short survey so we can unlock access for you sooner.</p>
+    <div class="early-alert-actions">
+      <button id="alertApply" class="alert-btn">Apply For Early Access</button>
+      <a class="alert-link" href="https://docs.google.com/forms/d/e/1FAIpQLSdC8L2MZRH8gaoF90pp9q8IHLW8Qp1f65Fh10lsVzleNms3gQ/viewform" target="_blank" rel="noopener">Fill survey to try it earlier</a>
+    </div>
+  </div>
+</div>
 
 <script src="script.js"></script>
 </body>
