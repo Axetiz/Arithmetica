@@ -3,86 +3,200 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Arithmeticα — Compete Beyond Numbers</title>
+<title>Arithmeticα — Guided Evaluation for Math Mastery</title>
 <link rel="icon" type="image/png" href="images/logo_dark.png">
 <link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
-<body class="theme-normal">
-<header>
-  <div class="brand">
-    <img class="brand-logo" src="images/logo_default.PNG" alt="Arithmeticα logo">
-    <div class="brand-name">Arithmeticα</div>
-  </div>
-  <div class="theme-toggle" id="themeToggle" data-theme="normal">
-    <div class="theme-toggle-circle"></div>
-  </div>
-  <h1>Compete Beyond Numbers.</h1>
-  <p class="sub">Solve real-time math challenges — integrals, functions, and many other practical problems — faster than your opponent.</p>
-  <button class="cta" id="ctaTop">Join the Live Arena</button>
-</header>
-
-<div class="wrap">
-  <div class="arena">
-    <div class="canvas-wrap">
-      <div class="canvas-head">
-        <div>Arena • Integral Challenge</div>
-        <div id="zLabel">Z = 0.00 • P(X ≤ Z) ≈ 0.50</div>
+<body class="theme-normal" data-page="home">
+<nav class="top-nav">
+  <div class="nav-inner">
+    <a class="nav-link nav-brand" href="index.html" data-page="home">Arithmeticα</a>
+    <div class="nav-rhs">
+      <div class="theme-toggle" id="themeToggle" data-theme="normal" role="group" aria-label="Theme selector">
+        <button type="button" class="theme-option active" data-set-theme="normal">Normal</button>
+        <button type="button" class="theme-option" data-set-theme="light">Light</button>
+        <button type="button" class="theme-option" data-set-theme="dark">Dark</button>
       </div>
-      <canvas id="graph" class="canvas"></canvas>
-    </div>
-
-    <div class="players">
-      <div class="card you">
-        <div>
-          <div class="tag">You</div>
-          <div class="state" id="youState">Answering…</div>
-        </div>
-        <div class="score" id="youScore">0</div>
-      </div>
-      <div class="card op">
-        <div>
-          <div class="tag">Opponent</div>
-          <div class="state" id="opState">Answering…</div>
-        </div>
-        <div class="score" id="opScore">0</div>
-      </div>
-    </div>
-
-    <a class="cta cta2" href="#signup" id="ctaMid">Start Challenge</a>
-
-    <div class="features">
-      <div class="feat"><h3>Real Math Simulations</h3><p>Visual integrals, distributions, functions and more.</p></div>
-      <div class="feat"><h3>Live Competition</h3><p>Face real opponents in fast-paced problem rounds.</p></div>
-      <div class="feat"><h3>Analytics Dashboard</h3><p>Instant feedback, accuracy, and improvement trends.</p></div>
-    </div>
-
-    <div id="signup" class="form">
-      <h4>Get Early Access</h4>
-      <p style="margin-top:0;color:var(--muted)">Join the beta and be the first to enter the arena.</p>
-      <form id="betaForm" data-remote-endpoint="">
-        <div class="form-row">
-          <input id="name" type="text" placeholder="Your name" required />
-          <input id="email" type="email" placeholder="Email address" required />
-          <button class="submit" type="submit">Join Waitlist</button>
-        </div>
-      </form>
-      <p id="formMsg" class="msg"></p>
-      <p class="survey-link"><a href="https://docs.google.com/forms/d/e/1FAIpQLSdC8L2MZRH8gaoF90pp9q8IHLW8Qp1f65Fh10lsVzIeNms3gQ/viewform" target="_blank" rel="noopener">Help us fill a quick survey</a> — it helps us grant early access faster.</p>
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu">
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="sr-only">Toggle navigation</span>
+      </button>
+      <div class="nav-menu" id="navMenu"></div>
     </div>
   </div>
-</div>
+</nav>
+
+<main>
+  <header>
+    <div class="brand">
+      <img class="brand-logo" src="images/logo_default.PNG" alt="Arithmeticα logo">
+      <div class="brand-name">Arithmeticα</div>
+    </div>
+    <p class="tagline">Learn. Collaborate. Improve.</p>
+    <h1 id="homeHeading">Elevate Your Math Mastery with AI.</h1>
+    <p class="sub">Arithmeticα pairs ∫-level practice sets with instant AI feedback, collaborative Σ-sessions, and transparent progress tracking so every solution moves from intuition to proof.</p>
+    <button class="cta" id="ctaTop">Start Learning</button>
+    <div class="quick-info-row">
+      <div class="quick-info-item">
+        <span class="quick-label">AI Feedback</span>
+        <p>Receive guided hints and solution breakdowns in seconds.</p>
+      </div>
+      <div class="quick-info-item">
+        <span class="quick-label">Peer Network</span>
+        <p>Join Σ-studios with teammates exploring the same proof paths.</p>
+      </div>
+      <div class="quick-info-item">
+        <span class="quick-label">Progress Tracking</span>
+        <p>Measure each attempt with transparent evaluation criteria.</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="arena">
+      <div class="canvas-wrap">
+        <div class="canvas-head">
+          <div>Progress Studio • Integral Insight Lab</div>
+          <div id="zLabel">Z = 0.00 • P(X ≤ Z) ≈ 0.50</div>
+        </div>
+        <div class="canvas" aria-hidden="true"></div>
+      </div>
+
+      <div class="players">
+        <div class="card you">
+          <div>
+            <div class="tag">You</div>
+            <div class="state" id="youState">Reviewing AI hints...</div>
+          </div>
+          <div class="score" id="youScore">0</div>
+        </div>
+        <div class="card op">
+          <div>
+            <div class="tag">Peer Cohort</div>
+            <div class="state" id="opState">Syncing peer reviews...</div>
+          </div>
+          <div class="score" id="opScore">0</div>
+        </div>
+      </div>
+
+      <a class="cta cta2" href="#signup" id="ctaMid">Preview Learning Map</a>
+
+      <div class="features">
+        <div class="feat"><h3>AI Feedback</h3><p>Get instant guidance on each Z-score or ∂ step with mentor-grade explanations.</p></div>
+        <div class="feat"><h3>Peer Network</h3><p>Pair up for live retros, annotate solutions together, and surface shared strategies.</p></div>
+        <div class="feat"><h3>Progress Tracking</h3><p>Monitor readiness with evaluation rubrics, milestone reviews, and adaptive loops.</p></div>
+      </div>
+
+      <div id="signup" class="form">
+        <h4>Join the Guided Pilot</h4>
+        <p style="margin-top:0;color:var(--muted)">Request an invite to the AI-assisted learning cohorts and unlock evaluation tools early — get instant AI feedback on solutions and collaborate with peers to master any topic.</p>
+        <form id="betaForm" data-remote-endpoint="">
+          <div class="form-row">
+            <input id="name" type="text" placeholder="Your name" required />
+            <input id="email" type="email" placeholder="Email address" required />
+            <button class="submit" type="submit">Join Cohort Waitlist</button>
+          </div>
+        </form>
+        <p id="formMsg" class="msg"></p>
+        <p class="survey-link"><a href="https://docs.google.com/forms/d/e/1FAIpQLSdC8L2MZRH8gaoF90pp9q8IHLW8Qp1f65Fh10lsVzIeNms3gQ/viewform" target="_blank" rel="noopener">Share your learning goals</a> — it helps us tailor the guided experience for you.</p>
+      </div>
+    </div>
+  </div>
+
+  <section class="page-wrap learning-lab" aria-labelledby="learningHeading">
+    <h2 id="learningHeading">AI Mentor Walkthrough</h2>
+    <p class="page-sub">See how Arithmeticα breaks down a foundational topic, connects it to real life, and keeps your friend Cat ready to co-compete on the same challenge.</p>
+    <div class="ai-demo">
+      <div class="ai-demo-main">
+        <article id="aiCourseNarrative" class="ai-course-card">
+          <h3>Mentor narration incoming</h3>
+          <p>This section will showcase how our AI coach explains problems with examples and co-op modes.</p>
+        </article>
+        <article class="competition-snapshot">
+          <h3>Live Challenge Snapshot</h3>
+          <div id="algorithmSnapshot" class="snapshot-grid">
+            <div class="snapshot-item"><strong>You</strong><span>Score: 28</span><span>Accuracy 94% • Feedback loops 3</span></div>
+            <div class="snapshot-item"><strong>Cat</strong><span>Score: 26</span><span>Accuracy 92% • Feedback loops 4</span></div>
+            <div class="snapshot-item"><strong>Cohort Pulse</strong><span>Milestone: Reflection due</span><span>Average mastery 88%</span></div>
+          </div>
+          <ul id="algorithmTimeline" class="timeline">
+            <li><strong>00:00 — Prompt Deployed</strong> Boolean Logic Warm-Up starts with shared constraints.</li>
+            <li><strong>00:04 — Hint Pulse</strong> AI nudges both solvers toward hazard edge-cases.</li>
+            <li><strong>00:09 — Peer Review</strong> Cat critiques your fallback plan; AI reconciles both paths.</li>
+            <li><strong>00:12 — Evaluation</strong> Rubric flags clarity gains and schedules next iteration.</li>
+          </ul>
+        </article>
+      </div>
+      <aside class="ai-demo-side">
+        <div class="competition-invite">
+          <h3>Invite a Friend</h3>
+          <p>Send Cat or any teammate a direct slot in your next evaluation match. Everyone receives the same AI hints, but each solution reflects individual mastery.</p>
+          <button id="inviteFriend" class="mini-btn">Invite Cat to Compete</button>
+        </div>
+        <div class="algorithm-card">
+          <h3>Progression Algorithm</h3>
+          <ol id="algorithmSteps" class="algorithm-steps">
+            <li>Surface a real-world prompt and map difficulty.</li>
+            <li>Route you and Cat through shared AI hints.</li>
+            <li>Evaluate solutions with rubric checkpoints.</li>
+            <li>Publish reflections; queue the next challenge.</li>
+            <li>Adapt scaffolding using streak + confidence.</li>
+          </ol>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="page-wrap community-lab" aria-labelledby="communityHeading">
+    <h2 id="communityHeading">Community Solutions Spotlight</h2>
+    <p class="page-sub">Review real problems, peek at peer solutions, and surface ideas to refine your own submissions before the next checkpoint.</p>
+    <div id="problemShowcase" class="problem-grid">
+      <article class="problem-card">
+        <h3>Design a Reliable Intersection Timer</h3>
+        <p style="font-weight:600;color:var(--text)">Boolean Functions • Safety Systems</p>
+        <p>Model a traffic signal with emergency override using Boolean expressions.</p>
+        <ul class="solution-list">
+          <li class="solution-item"><strong>You</strong>Separated emergency state into a dedicated flag; minimized logic with De Morgan's law.</li>
+          <li class="solution-item"><strong>Cat</strong>Introduced a parity check to debounce pedestrian buttons before overrides triggered.</li>
+          <li class="solution-item"><strong>Lin</strong>Used state encoding to avoid redundant gate evaluations and reduce load.</li>
+        </ul>
+      </article>
+      <article class="problem-card">
+        <h3>Optimize a Delivery Route</h3>
+        <p style="font-weight:600;color:var(--text)">Graph Theory • Shortest Path</p>
+        <p>Choose the minimal travel path across a weighted city graph with detours.</p>
+        <ul class="solution-list">
+          <li class="solution-item"><strong>Ava</strong>Dijkstra variant with real-time weight adjustments from weather data.</li>
+          <li class="solution-item"><strong>You</strong>Pre-computed articulation points to keep Cat from running into deadlocks.</li>
+        </ul>
+      </article>
+      <article class="problem-card">
+        <h3>Evaluate Conflicting A/B Tests</h3>
+        <p style="font-weight:600;color:var(--text)">Statistics • Hypothesis Testing</p>
+        <p>Two experiments report different insights on the same feature — reconcile the results.</p>
+        <ul class="solution-list">
+          <li class="solution-item"><strong>Cat</strong>Compared power levels and showed why the smaller sample lacked sensitivity.</li>
+          <li class="solution-item"><strong>Siva</strong>Stacked Bayesian posteriors to present a unified probability of lift.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+</main>
 
 <footer>© 2025 Arithmeticα • <a class="link" href="#">Privacy Policy</a> • Made by Axetiz</footer>
 
-<div id="earlyAccessAlert" class="early-alert hidden">
+<div id="earlyAccessAlert" class="early-alert hidden" role="dialog" aria-modal="true" aria-labelledby="earlyAlertTitle">
   <div class="early-alert-content">
-    <h5>Early access only</h5>
-    <p>The live arena is currently in early access. Apply below to join the waitlist and unlock the arena sooner.</p>
+    <h5 id="earlyAlertTitle">Early access required</h5>
+    <p>Arithmeticα is currently in early access. To get access, please apply with your name and email so we can invite you.</p>
     <div class="early-alert-actions">
       <button id="alertApply" class="alert-btn">Apply for Early Access</button>
     </div>
   </div>
+  
 </div>
 
 <script src="script.js"></script>
